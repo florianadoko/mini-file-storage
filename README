@@ -1,0 +1,148 @@
+Mini File Storage API
+
+🚀 Overview
+
+This is a Mini File Storage API built using Express.js and Firebase Storage. The API allows users to upload, download, delete, and manage access for files stored in Firebase.
+
+📌 Features
+
+\*\*User Authentication (JWT-based)
+
+File Uploads to Firebase Storage
+
+File Access Control (Public/Private)
+
+Download and Delete Files
+
+Firestore Metadata Storage
+
+Unit Testing with Jest & Supertest\*\*
+
+🛠️ Setup & Installation
+
+_1️⃣ Clone the Repository_
+
+`git clone https://github.com/florianadoko/mini-file-storage.git
+cd mini-file-storage-api`
+
+_2️⃣ Install Dependencies_
+
+`npm install`
+
+_3️⃣ Configure Environment Variables_
+
+Create a .env file and add:
+
+`PORT=5001
+FIREBASE_STORAGE_BUCKET=your-firebase-bucket
+JWT_SECRET=your-secret-key`
+
+_4️⃣ Setup Firebase Credentials_
+
+Download your Firebase service account JSON file.
+
+Place it in the config/ folder and name it firebase-key.json.
+
+# API Headers Explanation
+
+To interact with the API, specific headers must be included in requests, particularly for authentication and content type. Below is an explanation of the required headers:
+Authorization ✅ Yes (for protected routes) Used for authentication. The value should be a JWT token prefixed with "Bearer ". Authorization: Bearer <your-access-token>
+Content-Type ✅ Yes (for JSON requests) Specifies that the request body is in JSON format when sending data. Content-Type: application/json
+Accept ❌ No (Optional) Used to define the expected response format. Default is JSON. Accept: application/json
+
+🚀 API Endpoints
+
+1️⃣ User Authentication
+
+✅ Login
+
+**POST /auth/login**
+
+Request Body:
+
+`{
+  "email": "test@example.com",
+  "password": "password123"
+}`
+
+Response:
+
+{
+"message": "Login successful",
+"token": "your-jwt-token"
+}
+
+2️⃣ File Management
+
+✅ Upload File
+
+**POST /files/upload**
+
+Headers:
+
+`{
+  "Authorization": "Bearer your-jwt-token"
+}`
+
+Form Data:
+
+file (Binary file upload)
+
+accessType ("public" or "private")
+
+Response:
+
+`{
+  "message": "File uploaded",
+  "fileId": "abc123",
+  "fileURL": "https://storage.googleapis.com/..."
+}
+`
+✅ Download File
+
+**GET /files/download/:fileId**
+Response: Binary file download
+
+✅ Delete File (Only the owner can delete)
+
+**DELETE /files/:fileId**
+
+Response:
+
+`{
+  "message": "File deleted successfully"
+}`
+
+✅ Update File Access (Public/Private)
+
+**PATCH /files/:fileId/access**
+
+Request Body:
+
+{
+"accessType": "private"
+}
+
+Response:
+`
+{
+  "message": "File access updated successfully"
+}`
+
+_🧪 Running Unit Tests_
+
+We use Jest & Supertest to test API endpoints.
+
+1️⃣ Install Testing Dependencies
+
+npm install --save-dev jest supertest
+
+2️⃣ Run Tests
+
+npm test
+
+Test Cases Covered:
+
+✅ File Upload, Download, and Deletion
+✅ Unauthorized Access Handling
+✅ Firestore Metadata Validation
